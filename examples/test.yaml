@@ -1,0 +1,20 @@
+output_dir: './output'
+tag: 'bone_filled_200'
+
+material:
+  elasticity: 'CorotatedElasticity'
+  plasticity: 'IdentityPlasticity'
+  color: 'blue'
+
+point_cloud:
+  path: './models/bone_filled_200.obj'
+  scale: 0.6
+
+sim:
+  num_frames: 60
+  steps_per_frame: 10
+  initial_velocity: [0.0, 0.0, 0.0]
+  boundary_conditions: 
+    - type: 'sdf_collider_test'
+      start_time: 0.0
+      end_time: 1e3
