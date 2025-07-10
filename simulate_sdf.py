@@ -87,6 +87,7 @@ def visualize_frames(
     c: str = 'blue',
     s: float = 20,
     fps: int = 30,
+    sample_rate: int = 1
 ): 
     xlim = [center[0] - size[0] / 2, center[0] + size[0] / 2]
     ylim = [center[1] - size[1] / 2, center[1] + size[1] / 2]
@@ -103,7 +104,7 @@ def visualize_frames(
         ax.set_ylim(ylim)
         ax.set_zlim(zlim)
         scat = ax.scatter(frames[frame][:, 0], frames[frame][:, 1], frames[frame][:, 2], s=s, c=c)
-        ax.set_title(f'Frame {frame}')
+        ax.set_title(f'Frame {frame * sample_rate}')
         return scat
     ani = FuncAnimation(fig, update, frames=len(frames), blit=False)
     ani.save(export_path, writer='pillow', fps=fps)
@@ -121,10 +122,12 @@ if __name__ == '__main__':
     material_params = cfg.material
     sim_params = cfg.sim
     pc_params = cfg.point_cloud
+    obj_name = pc_params.path.split("/")[-1].split(".")[0] + "_" + cfg.tag
+    print(obj_name)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if not os.path.exists(cfg.output_dir):
         os.makedirs(cfg.output_dir)
-    export_path = os.path.join(cfg.output_dir, cfg.tag + ".gif")
+    export_path = os.path.join(cfg.output_dir, obj_name + "_deformation.gif")
 
     # Create a cube for simulation
     # particles = get_cube(
@@ -141,7 +144,6 @@ if __name__ == '__main__':
         center=[0.5, 0.5, 0.5], 
         scale=pc_params.scale
     )
-
 
     n_particles = particles.shape[0]
 
@@ -178,13 +180,16 @@ if __name__ == '__main__':
 
 
 
-    output_pc_obj(x, "models/bone_deformed_200.obj")
+    output_pc_obj(x, "models/"+obj_name+"_deformed.obj")
+    sample_rate = 5
+    new_frames = frames[::sample_rate]
 
     # Visualize
-    # print(f'Rendering to {export_path}...')
-    # visualize_frames(
-    #     frames, 
-    #     export_path=export_path, 
-    #     size=[1, 1, 1], 
-    #     c=material_params.color
-    # )
+    print(f'Rendering to {export_path}...')
+    visualize_frames(
+        new_frames, 
+        export_path=export_path, 
+        size=[1, 1, 1], 
+        c=material_params.color,
+        sample_rate = sample_rate
+    )

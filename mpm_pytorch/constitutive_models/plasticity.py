@@ -8,6 +8,7 @@ from .abstract import Plasticity
 
 class DruckerPragerPlasticity(Plasticity):
     def __init__(self, E: float=2e6, nu: float=0.4, friction_angle: float=25.0, cohesion: float=0.0) -> None:
+    # def __init__(self, E: float=6e6, nu: float=0.4, friction_angle: float=35.0, cohesion: float=1e4) -> None:
         super().__init__()
 
         self.register_buffer('log_E', torch.Tensor([E]).log())

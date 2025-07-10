@@ -1,17 +1,17 @@
 output_dir: './output'
-tag: 'bone_filled_200'
+tag: 'test'
 
 material:
   elasticity: 'CorotatedElasticity'
-  plasticity: 'IdentityPlasticity'
+  plasticity: 'DruckerPragerPlasticity'
   color: 'blue'
 
 point_cloud:
-  path: './models/bone_filled_200.obj'
+  path: './models/cranium_example_ds_100.obj'
   scale: 0.6
 
 sim:
-  num_frames: 60
+  num_frames: 100
   steps_per_frame: 10
   initial_velocity: [0.0, 0.0, 0.0]
   boundary_conditions: 
